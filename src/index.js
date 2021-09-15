@@ -1,17 +1,34 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+// 组件
+import ClassApp from "./page/ClassApp";
+import FuncAPP from "./page/FuncApp";
+// redux 储存器
+import store from './redux/store/store'
+import { Provider } from 'react-redux';
+// 样式
+import 'antd/dist/antd.css';
+import "./index.css";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      {/* 类组件使用redux */}
+      <ClassApp />
+
+      {/* 函数组件使用redux  二者选一*/}
+      {/* <FuncAPP/> */}
+    </Provider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// 热模块更新
+if (module.hot) {
+  // accept 函数的第一个参数指出当前文件接受哪些子模块的替换，这里表示只接受 ./page/ClassApp 这个子模块
+  // 第2个参数用于在新的子模块加载完毕后需要执行的逻辑
+  module.hot.accept(['./page/ClassApp'], () => {
+    // 新的 AppComponent 加载成功后重新执行下组建渲染逻辑
+    ReactDOM.render(<ClassApp />, document.getElementById('root'));
+  });
+}
